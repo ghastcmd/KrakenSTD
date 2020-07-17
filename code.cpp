@@ -1,12 +1,12 @@
 #ifdef __cplusplus
-#define declspec extern "C"
+#define declext extern "C"
 #else
-#define declspec
+#define declext
 #endif
 
 #include "inttypes.hpp"
 
-declspec int get_os()
+declext int get_os()
 {
 #if defined (_WIN32)
     return 0; // windows
@@ -17,11 +17,11 @@ declspec int get_os()
 #endif
 }
 
-declspec void read(int fd, const char *buffer, size_t input_lenght);
-declspec void write(int fd, const char *buffer, size_t buffer_size);
-declspec void exit(int retcode);
-declspec void open(const char* fname, int flags, int mode);
-declspec void close(int fd);
+declext void read(int fd, const char *buffer, size_t input_lenght);
+declext void write(int fd, const char *buffer, size_t buffer_size);
+declext void exit(int retcode);
+declext void open(const char* fname, int flags, int mode);
+declext void close(int fd);
 
 static const char *endl = "\n";
 
@@ -38,17 +38,11 @@ size_t strlen(const char *str)
     return ptr - str;
 }
 
-void puts(char *str)
-{
-    write(1, str, strlen(str));
-    write(1, "\n", 2);
-}
-
 void print(const char ch)
 {
-    char buffer[2];
-    buffer[0] = ch;
-    write(1, buffer, 2);
+    char buf[] = "\0\0";
+    *buf = ch;
+    write(1, buf, 2);
 }
 
 void print(const char *fmt)
@@ -57,7 +51,7 @@ void print(const char *fmt)
 }
 
 template <typename _ty>
-void print(const _ty val)
+auto print(const _ty val) -> enable_if_t<is_integer<_ty>()>
 {
     if (val == 0)
     {
@@ -94,11 +88,10 @@ void print(const _ty val)
     print((const char*)buffer);
 }
 
-template <typename _ty, typename ...args>
-void print(_ty &val, args&...params)
+template <typename _ty, typename ..._args>
+void print(_ty val, _args...args)
 {
-    print(val);
-    print(params...);
+    return (print(val), print(' '), print(args...));
 }
 
 template <typename _ty>
@@ -107,10 +100,10 @@ void println(_ty val)
     print(val, endl);
 }
 
-template <typename _ty, typename ...args>
-void println(_ty &val, args& ...params)
+template <typename _ty, typename ..._args>
+void println(_ty val, _args...args)
 {
-    print(val, params..., endl);
+    return (print(val), println(args...));
 }
 
 struct al
@@ -124,20 +117,14 @@ void print(al &val)
     print((uint64_t)val.val);
 }
 
-declspec int _entry(int argc, char **argv)
+declext int _entry(int argc, char **argv)
 {
-    println("this is a line");
+    println("this ", "is ", "ad-absurdum ", 10 * 2000 + 40);
 
-    println(-3);
+    print(endl);
 
-    int64_t o = -1;
+    print(300, endl);
 
-    uint64_t i = *(uint64_t*)(void*)&o;
-    int64_t e = i + 1;
-    println(e);
 
-    println(01);
-
-    
     return 0;
 }

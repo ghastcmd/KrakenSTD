@@ -6,7 +6,7 @@ using uint16_t = unsigned short;
 using uint8_t  = unsigned char;
 
 using int64_t = signed long long;
-using int32_t = signed int;
+using int32_t = int;
 using int16_t = signed short;
 using int8_t  = signed char;
 
