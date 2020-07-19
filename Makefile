@@ -1,9 +1,9 @@
-min_flags = -s -O3 -pedantic -no-pie -fno-asynchronous-unwind-tables -std=c++17\
+min_flags = -s -O3 -pedantic -no-pie -fno-asynchronous-unwind-tables -std=c++17 \
 -ffreestanding -nostdlib -fno-stack-protector -fdata-sections -ffunction-sections
 
 linker_flags = -s --build-id=none
 
-alert_flags = -Wall -Werror
+alert_flags = -Wall -Werror -Wextra
 
 CC = g++
 
@@ -20,7 +20,6 @@ LINKER = ld
 bin.exe: $(addsuffix .o,$(basename $(wildcard *.cpp *.s)))
 	@echo Compiling $< to $@
 	@$(LINKER) $(linker_flags) $^ -o $@
-#@$(CC) $(min_flags) $(alert_flags) $^ -o $@
 
 build: bin.exe
 
