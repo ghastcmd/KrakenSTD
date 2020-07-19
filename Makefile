@@ -17,9 +17,11 @@ LINKER = ld
 	@echo Compiling $< to $@
 	@$(CC) $(min_flags) $(alert_flags) -c $<
 
-bin.exe: $(addsuffix .o,$(basename $(wildcard *.cpp *.s)))
-	@echo Compiling $< to $@
-	@$(LINKER) $(linker_flags) $^ -o $@
+files = $(addsuffix .o,$(basename $(wildcard *.cpp *.s)))
+bin.exe: $(files)
+	@echo Compiling $^ to $@
+	@$(CC) $(min_flags) $^ -o $@
+# @$(LINKER) $(linker_flags) $^ -o $@
 
 build: bin.exe
 

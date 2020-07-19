@@ -4,7 +4,7 @@
 static const char *endl = "\n";
 
 template <typename _ty>
-void swap (_ty &f, _ty &l) { _ty ax = f; f = l; l = ax; }
+void swap(_ty &f, _ty &l) { _ty ax = f; f = l; l = ax; }
 
 template <typename _ty>
 void iter_swap(_ty *f, _ty *l) { _ty ax = *f; *f = *l; *l = ax; }
@@ -61,14 +61,6 @@ auto print(const _ty val) -> enable_if_t<is_integer<_ty>::value>
 
 
 
-struct dummy_inline
-{ template <typename ..._args> dummy_inline(_args...) {} };
-
-template <typename ..._args>
-inline void dummy_inline_func(_args...args) {}
-
-
-
 template <typename _ty>
 inline constexpr void println(_ty val)
 {
@@ -84,8 +76,12 @@ inline constexpr void println(_ty val, _args...args)
 
 declext int _entry()
 {
+    char tst_str[] = "eqwewq3221321321";
 
-    println(sizeof(dummy_inline));
-    
+    println(tst_str);
+
+    println("this is a simple string ", sizeof(size_t));
+    println("this is a simple string ", sizeof(int64_t));
+
     return 0;
 }

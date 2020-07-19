@@ -1,6 +1,7 @@
 #pragma once
 
-typedef unsigned long int size_t;
+using size_t = unsigned long int;
+using ssize_t = signed long int;
 
 #ifdef __cplusplus
 #define declext extern "C"
@@ -20,13 +21,13 @@ declext int get_os()
 }
 
 /// @ret: count of bytes read
-declext void read(int fd, const char *buffer, size_t input_lenght);
+declext void read(int __fd, void const *__buf, size_t __len);
 /// @ret: count of chars written
-declext int write(int fd, const char *buffer, size_t buffer_size);
+declext ssize_t write(int __fd, void const *__buf, size_t __len);
 
 /// @ret: file descriptor
-declext int open(const char* fname, int flags, int mode);
+declext int open(char const* __path, int __flags, int __mode);
 /// @ret: zero on success, -1 on failure
-declext void close(int fd);
+declext void close(int __fd);
 
-declext void exit(int retcode);
+// declext void exit(int retcode);

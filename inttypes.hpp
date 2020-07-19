@@ -1,17 +1,18 @@
 #pragma once
 
-using uint64_t = unsigned long long;
+using uint64_t = unsigned long long int;
 using uint32_t = unsigned int;
 using uint16_t = unsigned short;
 using uint8_t  = unsigned char;
 
-using int64_t = signed long long;
+using int64_t = signed long long int;
 using int32_t = signed int;
 using int16_t = signed short;
 using int8_t  = signed char;
 
-using size_t = long unsigned int;
-using byte   = unsigned char;
+using size_t  = unsigned long int;
+using ssize_t = signed long int;
+using byte    = unsigned char;
 
 template <typename _ty>
 struct sizes {};
@@ -184,9 +185,7 @@ using enable_if_t = typename enable_if<_test, _ty>::type;
 
 
 template <typename _ty1, typename _ty2>
-struct is_same
-{ static constexpr bool value = false; };
+struct is_same : false_type {};
 
 template <typename _ty>
-struct is_same<_ty, _ty>
-{ static constexpr bool value = true; };
+struct is_same<_ty, _ty> : true_type {};
