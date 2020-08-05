@@ -12,7 +12,10 @@ void iter_swap(_ty *f, _ty *l) { _ty ax = *f; *f = *l; *l = ax; }
 size_t strlen(const char *str)
 {
     const char *ptr = str;
-    while (*ptr++);
+    while (*ptr)
+    {
+        ptr++;
+    }
     return ptr - str;
 }
 
@@ -22,7 +25,7 @@ void print(const char *fmt)
 }
 
 template <typename _ty>
-auto print(const _ty val) -> enable_if_t<is_integer<_ty>::value>
+auto print(const _ty val) -> enable_if_t<is_integer_v<_ty>>
 {
     if (val == 0)
     {
@@ -35,7 +38,7 @@ auto print(const _ty val) -> enable_if_t<is_integer<_ty>::value>
     char *ps_buffer = buffer;
     _ty tval = val;
 
-    if constexpr(!is_unsigned<_ty>::value)
+    if constexpr(!is_unsigned_v<_ty>)
     {
         if (val < 0)
         {
@@ -74,14 +77,11 @@ inline constexpr void println(_ty val, _args...args)
     return (print(val), println(args...));
 }
 
-declext int _entry()
+extern "C" int _entry()
 {
-    char tst_str[] = "eqwewq3221321321";
+    char str[] = "eqwewq3221321321";
 
-    println(tst_str);
-
-    println("this is a simple string ", sizeof(size_t));
-    println("this is a simple string ", sizeof(int64_t));
+    println(str);
 
     return 0;
 }

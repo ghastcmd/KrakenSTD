@@ -147,7 +147,7 @@ template <>
 struct is_integer <size_t>   : true_type {};
 
 template <typename _ty>
-using is_integer_v = typename is_integer<_ty>::value;
+constexpr bool is_integer_v = is_integer<_ty>::value;
 
 
 
@@ -165,6 +165,10 @@ struct is_unsigned <uint32_t> : true_type {};
 
 template <>
 struct is_unsigned <uint64_t> : true_type {};
+
+
+template <typename _ty>
+constexpr bool is_unsigned_v = is_unsigned<_ty>::value;
 
 
 
@@ -189,3 +193,6 @@ struct is_same : false_type {};
 
 template <typename _ty>
 struct is_same<_ty, _ty> : true_type {};
+
+template <typename _ty1, typename _ty2>
+constexpr bool is_same_v = is_same<_ty1, _ty2>::value;
