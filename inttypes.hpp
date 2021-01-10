@@ -149,6 +149,24 @@ struct is_integer <size_t>   : true_type {};
 template <typename _ty>
 constexpr bool is_integer_v = is_integer<_ty>::value;
 
+template <typename _ty>
+constexpr bool integer = is_integer_v<_ty>;
+
+
+template <typename _ty>
+struct is_floating : false_type {};
+
+template <>
+struct is_floating <float> : true_type {};
+
+template <>
+struct is_floating <double> : true_type {};
+
+template <typename _ty>
+constexpr bool is_floating_v = is_floating<_ty>::value;
+
+template <typename _ty>
+constexpr bool floating = is_floating_v<_ty>;
 
 
 template <typename _ty>
@@ -169,7 +187,6 @@ struct is_unsigned <uint64_t> : true_type {};
 
 template <typename _ty>
 constexpr bool is_unsigned_v = is_unsigned<_ty>::value;
-
 
 
 template <bool _test, typename _ty = void>

@@ -1,9 +1,9 @@
-min_flags = -s -O3 -pedantic -no-pie -fno-asynchronous-unwind-tables -std=c++17 \
+min_flags = -s -O3 -pedantic -no-pie -fno-asynchronous-unwind-tables -std=c++2a \
 -ffreestanding -nostdlib -fno-stack-protector -fdata-sections -ffunction-sections
 
 linker_flags = -s --build-id=none
 
-alert_flags = -Wall -Werror -Wextra
+alert_flags = -fconcepts -Wall -Werror -Wextra
 
 CC = g++
 

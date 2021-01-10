@@ -24,8 +24,8 @@ void print(const char *fmt)
     write(0, fmt, strlen(fmt));
 }
 
-template <typename _ty>
-auto print(const _ty val) -> enable_if_t<is_integer_v<_ty>>
+template <typename _ty> requires integer<_ty>
+void print(const _ty val)
 {
     if (val == 0)
     {
@@ -62,7 +62,20 @@ auto print(const _ty val) -> enable_if_t<is_integer_v<_ty>>
     print((const char*)buffer);
 }
 
+template <typename _ty> requires floating<_ty>
+void print(const _ty val) 
+{
+    extern size_t to_float(char *, float, int = 6);
+    char buffer[10];
+    to_float(buffer, val);
+    print(buffer);
+}
 
+
+inline void println()
+{
+    print(endl);
+}
 
 template <typename _ty>
 inline constexpr void println(_ty val)
@@ -79,9 +92,14 @@ inline constexpr void println(_ty val, _args...args)
 
 extern "C" int _entry()
 {
+    char str1[] = "aewqeqw";
+    write(1, str1, sizeof(str1));
+    println();
     char str[] = "eqwewq3221321321";
 
     println(str);
+
+    println(3.14155454);
 
     return 0;
 }
