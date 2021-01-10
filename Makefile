@@ -9,27 +9,39 @@ CC = g++
 
 LINKER = ld
 
-%.o: %.cpp
-	@echo Compiling $< to $@
-	@$(CC) $(min_flags) $(alert_flags) -c $<
+src = src
+obj = bin
 
-%.o: %.s
-	@echo Compiling $< to $@
-	@$(CC) $(min_flags) $(alert_flags) -c $<
+source = $(wildcard $(addprefix $(src)/*.,cpp s))
+object = $(patsubst %,$(obj)/%.o, $(notdir $(basename $(source))))
 
-files = $(addsuffix .o,$(basename $(wildcard *.cpp *.s)))
-bin.exe: $(files)
+target = $(obj)/bin
+
+VPATH = $(src)
+$(obj)/%.o: %.cpp
+	@echo Compiling $< to $@
+	@$(CC) $(min_flags) $(alert_flags) -c $< -o $@
+
+$(obj)/%.o: %.s
+	@echo Compiling $< to $@
+	@$(CC) $(min_flags) $(alert_flags) -c $< -o $@
+
+$(target): $(object)
 	@echo Compiling $^ to $@
 	@$(CC) $(min_flags) $^ -o $@
 # @$(LINKER) $(linker_flags) $^ -o $@
 
-build: bin.exe
+build: $(target)
 
 run: build
-	@./bin.exe
+	@$(target)
+
+help:
+	@echo $(source)
+	@echo $(object)
 
 clean:
-	rm -f *.o
-	rm -f code.exe
-	rm -f bin.exe
-	rm -f a.out
+	@echo Cleaning object files
+	@rm -f $(obj)/*.o
+	@echo Cleaning target binary
+	@rm -f $(target)
