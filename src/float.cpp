@@ -1,4 +1,5 @@
 #include "inttypes.hpp"
+#include "stlcpp.hpp"
 
 size_t to_float(char * str, float dt, int precision = 6)
 {
@@ -21,16 +22,12 @@ size_t to_float(char * str, float dt, int precision = 6)
         len++;
         cast_dt /= 10;
     }
-    auto rev_str = [](char* lptr, char* rptr){
-        while (lptr < rptr)
-        {
-            char ax = *lptr;
-            *lptr++ = *rptr;
-            *rptr-- = ax;
-        }
-    };
-    rev_str(str + neg, sptr - 1);
-
+    
+    for (auto lptr = str + neg, rptr = sptr - 1; lptr < rptr; lptr++, rptr--)
+    {
+        iter_swap(lptr, rptr);
+    }
+    
     if (len == 0) *sptr++ = '0';
     *sptr++ = '.';
 

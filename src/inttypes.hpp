@@ -10,8 +10,14 @@ using int32_t = signed int;
 using int16_t = signed short;
 using int8_t  = signed char;
 
+#ifdef __linux__
 using size_t  = unsigned long int;
 using ssize_t = signed long int;
+#else
+using size_t  = unsigned long long int;
+using ssize_t = signed long long int;
+#endif
+
 using byte    = unsigned char;
 
 template <typename _ty>
@@ -49,6 +55,8 @@ struct sizes <uint64_t> {
     static constexpr byte len = 20;
 };
 
+#ifdef __linux__
+
 template <>
 struct sizes <size_t> {
     using type = size_t;
@@ -57,6 +65,7 @@ struct sizes <size_t> {
     static constexpr byte len = 20;
 };
 
+#endif
 
 template <>
 struct sizes <int8_t> {
@@ -143,14 +152,18 @@ struct is_integer <uint32_t> : true_type {};
 template <>
 struct is_integer <uint64_t> : true_type {};
 
+#ifdef __linux__
+
 template <>
 struct is_integer <size_t>   : true_type {};
+
+#endif
 
 template <typename _ty>
 constexpr bool is_integer_v = is_integer<_ty>::value;
 
 template <typename _ty>
-constexpr bool integer = is_integer_v<_ty>;
+constexpr bool integral = is_integer_v<_ty>;
 
 
 template <typename _ty>
@@ -165,8 +178,11 @@ struct is_floating <double> : true_type {};
 template <typename _ty>
 constexpr bool is_floating_v = is_floating<_ty>::value;
 
+// template <typename _ty>
+// constexpr bool floating = is_floating_v<_ty>;
+
 template <typename _ty>
-constexpr bool floating = is_floating_v<_ty>;
+concept floating = is_floating_v<_ty>;
 
 
 template <typename _ty>
