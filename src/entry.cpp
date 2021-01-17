@@ -1,13 +1,10 @@
 #include "syscalls.hpp"
 #include "inttypes.hpp"
+#include "stlcpp.hpp"
 
 static const char *endl = "\n";
 
-template <typename _ty>
-void swap(_ty &f, _ty &l) { _ty ax = f; f = l; l = ax; }
-
-template <typename _ty>
-void iter_swap(_ty *f, _ty *l) { _ty ax = *f; *f = *l; *l = ax; }
+#ifdef __linux__
 
 size_t strlen(const char *str)
 {
@@ -19,12 +16,21 @@ size_t strlen(const char *str)
     return ptr - str;
 }
 
+#endif
+
 void print(const char *fmt)
 {
-    write(0, fmt, strlen(fmt));
+    const char *ptr = fmt;
+    while (*ptr)
+    {
+        ptr++;
+    }
+    size_t len = ptr - fmt;
+
+    write(0, fmt, len);
 }
 
-template <typename _ty> requires integer<_ty>
+template <typename _ty> requires integral<_ty>
 void print(const _ty val)
 {
     if (val == 0)
@@ -55,9 +61,9 @@ void print(const _ty val)
     }
 
     *p_buffer-- = 0;
-    while (ps_buffer < p_buffer)
+    for (;ps_buffer < p_buffer; ps_buffer++, p_buffer--)
     {
-        iter_swap(ps_buffer++, p_buffer--);
+        iter_swap(ps_buffer, p_buffer);
     }
     print((const char*)buffer);
 }
@@ -90,12 +96,53 @@ inline constexpr void println(_ty val, _args...args)
     return (print(val), println(args...));
 }
 
+#ifdef _WIN32
+
+void * CreateFile(
+    const char * nm, int desired_access, int share_mode, void * security_attrs,
+    int creation_disposition, int flags_n_attr, void * template_file
+);
+
+long int write(int fd, void const *buff, unsigned long int len)
+{
+    (void)fd;
+    (void)len;
+    (void)buff;
+
+    fd = -10 - fd;
+
+    // void* handle = CreateFile("CONOUT$", 3, 3, nullptr, 3, 0, nullptr);
+
+    void *handle = (void*)-1;
+
+    unsigned int iosb[2];
+    NtWriteFile(handle, 0, 0, 0, iosb, (void*)buff, len, 0, 0);
+    return iosb[1];
+}
+
+extern "C" void exit(int exit_code)
+{
+    NtTerminateProcess((void*)-1, exit_code);
+}
+
+#endif
+
 extern "C" int _entry()
 {
     char str1[] = "aewqeqw";
     write(1, str1, sizeof(str1));
     println();
     char str[] = "eqwewq3221321321";
+
+    #ifdef __linux__
+
+    println("simple text i'm writing right now");
+    // void * handle;
+    // char str[] = "text";
+    // unsigned long iost[2];
+    // NtWriteFile(handle, 0, 0, 0, &iost, str, sizeof(str), 0, 0);
+
+    #endif
 
     println(str);
 

@@ -163,7 +163,7 @@ template <typename _ty>
 constexpr bool is_integer_v = is_integer<_ty>::value;
 
 template <typename _ty>
-constexpr bool integral = is_integer_v<_ty>;
+concept integral = is_integer_v<_ty>;
 
 
 template <typename _ty>
@@ -177,9 +177,6 @@ struct is_floating <double> : true_type {};
 
 template <typename _ty>
 constexpr bool is_floating_v = is_floating<_ty>::value;
-
-// template <typename _ty>
-// constexpr bool floating = is_floating_v<_ty>;
 
 template <typename _ty>
 concept floating = is_floating_v<_ty>;

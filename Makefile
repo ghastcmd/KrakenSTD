@@ -3,7 +3,8 @@ min_flags = -s -O3 -pedantic -no-pie -fno-asynchronous-unwind-tables -std=c++2a 
 
 linker_flags = -s --build-id=none
 
-alert_flags = -fconcepts -Wall -Werror -Wextra
+alert_flags = -Wall -Werror -Wextra
+comp_flags = -std=c++2a -fconcepts
 
 CC = g++
 
@@ -19,15 +20,15 @@ target = $(obj)/bin
 
 VPATH = $(src)
 $(obj)/%.o: %.cpp
-	@echo Compiling $< to $@
-	@$(CC) $(min_flags) $(alert_flags) -c $< -o $@
+	@echo Compiling intermediate $< to $@
+	@$(CC) $(min_flags) $(comp_flags) $(alert_flags) -c $< -o $@
 
 $(obj)/%.o: %.s
-	@echo Compiling $< to $@
-	@$(CC) $(min_flags) $(alert_flags) -c $< -o $@
+	@echo Compiling intermediate $< to $@
+	@$(CC) $(min_flags) $(comp_flags) $(alert_flags) -x assembler-with-cpp -c $< -o $@
 
 $(target): $(object)
-	@echo Compiling $^ to $@
+	@echo Compiling target $@ from $^
 	@$(CC) $(min_flags) $^ -o $@
 # @$(LINKER) $(linker_flags) $^ -o $@
 
